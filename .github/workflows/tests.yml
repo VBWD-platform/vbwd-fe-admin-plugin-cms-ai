@@ -24,6 +24,18 @@ jobs:
           submodules: recursive
       - name: Overlay plugin source
         run: cp -r plugin-src/. vbwd-fe-admin/plugins/cms-ai/
+      # cms-ai registers an editor extension into cms-admin's registry and its
+      # tests import ../../../cms-admin/src/editor/* — cms-admin is gitignored in
+      # vbwd-fe-admin, so overlay it from its own repo for the import to resolve.
+      - name: Checkout cms-admin peer
+        uses: actions/checkout@v4
+        with:
+          repository: VBWD-platform/vbwd-fe-admin-plugin-cms
+          path: cms-admin-src
+      - name: Overlay cms-admin peer
+        run: |
+          mkdir -p vbwd-fe-admin/plugins/cms-admin
+          cp -r cms-admin-src/. vbwd-fe-admin/plugins/cms-admin/
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
