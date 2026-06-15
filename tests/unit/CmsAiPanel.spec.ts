@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { mount, flushPromises, type VueWrapper } from '@vue/test-utils';
 import { createI18n } from 'vue-i18n';
 import { ref } from 'vue';
+import { AppEvents, eventBus, type NotificationPayload } from 'vbwd-view-component';
 import { api } from '@/api';
 import CmsAiPanel from '../../src/components/CmsAiPanel.vue';
 import { getCmsAiPanelState, selectAction } from '../../src/cmsAiPanelState';
@@ -185,5 +186,121 @@ describe('CmsAiPanel.vue', () => {
     const [, body] = (api.post as any).mock.calls[0];
     expect(body.action).toBe('seo');
     expect(body.read_excerpt).toBe(false); // seo does not default read-excerpt on
+  });
+
+  it('runs seo with an EMPTY prompt by sending a default instruction (no missing-prompt error)', async () => {
+    (api.post as any).mockResolvedValue({
+      patch: { meta_title: 'M', meta_description: 'D' },
+    });
+    selectAction('seo');
+    const { context, applyPatch } = makeContext();
+    const wrapper = mountPanel(context);
+    // No prompt typed — the SEO action regenerates from title + content.
+    await wrapper.find('[data-testid="cms-ai-generate"]').trigger('click');
+    await flushPromises();
+
+    expect(wrapper.find('[data-testid="cms-ai-error"]').exists()).toBe(false);
+    expect(api.post).toHaveBeenCalledTimes(1);
+    const [url, body] = (api.post as any).mock.calls[0];
+    expect(url).toBe('/plugins/cms-ai/generate');
+    expect(body.action).toBe('seo');
+    expect(typeof body.prompt).toBe('string');
+    expect(body.prompt.trim().length).toBeGreaterThan(0); // backend 404s on empty
+    expect(applyPatch).toHaveBeenCalledWith({ meta_title: 'M', meta_description: 'D' });
+  });
+
+  it('runs restyle with an EMPTY prompt by sending a default instruction', async () => {
+    (api.post as any).mockResolvedValue({ patch: { source_css: 'body{}' } });
+    selectAction('restyle');
+    const { context } = makeContext();
+    const wrapper = mountPanel(context);
+    await wrapper.find('[data-testid="cms-ai-generate"]').trigger('click');
+    await flushPromises();
+
+    expect(wrapper.find('[data-testid="cms-ai-error"]').exists()).toBe(false);
+    const [, body] = (api.post as any).mock.calls[0];
+    expect(body.action).toBe('restyle');
+    expect(body.prompt.trim().length).toBeGreaterThan(0);
+  });
+
+  it('prefers the typed prompt over the default for seo when one is provided', async () => {
+    (api.post as any).mockResolvedValue({ patch: { meta_title: 'M' } });
+    selectAction('seo');
+    const { context } = makeContext();
+    const wrapper = mountPanel(context);
+    await wrapper.find('[data-testid="cms-ai-prompt"]').setValue('focus on keyword astronomy');
+    await wrapper.find('[data-testid="cms-ai-generate"]').trigger('click');
+    await flushPromises();
+    const [, body] = (api.post as any).mock.calls[0];
+    expect(body.prompt).toBe('focus on keyword astronomy');
+  });
+
+  it('still blocks the article action with an empty prompt (genuinely needs one)', async () => {
+    selectAction('article');
+    const { context, applyPatch } = makeContext();
+    const wrapper = mountPanel(context);
+    await wrapper.find('[data-testid="cms-ai-generate"]').trigger('click');
+    await flushPromises();
+    expect(wrapper.find('[data-testid="cms-ai-error"]').exists()).toBe(true);
+    expect(api.post).not.toHaveBeenCalled();
+    expect(applyPatch).not.toHaveBeenCalled();
+  });
+
+  it('emits a success notification on a successful generation', async () => {
+    (api.post as any).mockResolvedValue({ patch: { content_html: '<p>x</p>' } });
+    const events: NotificationPayload[] = [];
+    const unsubscribe = eventBus.on<NotificationPayload>(
+      AppEvents.NOTIFICATION_SHOW,
+      (payload) => events.push(payload),
+    );
+    try {
+      const { context } = makeContext();
+      const wrapper = mountPanel(context);
+      await wrapper.find('[data-testid="cms-ai-prompt"]').setValue('go');
+      await wrapper.find('[data-testid="cms-ai-generate"]').trigger('click');
+      await flushPromises();
+      expect(events).toHaveLength(1);
+      expect(events[0].type).toBe('success');
+      expect(events[0].message).toBe(en.cmsAi.generationDone);
+    } finally {
+      unsubscribe();
+    }
+  });
+
+  it('does NOT emit a notification when the request fails', async () => {
+    (api.post as any).mockRejectedValue(new Error('boom'));
+    const events: NotificationPayload[] = [];
+    const unsubscribe = eventBus.on<NotificationPayload>(
+      AppEvents.NOTIFICATION_SHOW,
+      (payload) => events.push(payload),
+    );
+    try {
+      const { context } = makeContext();
+      const wrapper = mountPanel(context);
+      await wrapper.find('[data-testid="cms-ai-prompt"]').setValue('go');
+      await wrapper.find('[data-testid="cms-ai-generate"]').trigger('click');
+      await flushPromises();
+      expect(events).toHaveLength(0);
+    } finally {
+      unsubscribe();
+    }
+  });
+
+  it('does NOT emit a notification on the empty-prompt early return (article)', async () => {
+    selectAction('article');
+    const events: NotificationPayload[] = [];
+    const unsubscribe = eventBus.on<NotificationPayload>(
+      AppEvents.NOTIFICATION_SHOW,
+      (payload) => events.push(payload),
+    );
+    try {
+      const { context } = makeContext();
+      const wrapper = mountPanel(context);
+      await wrapper.find('[data-testid="cms-ai-generate"]').trigger('click');
+      await flushPromises();
+      expect(events).toHaveLength(0);
+    } finally {
+      unsubscribe();
+    }
   });
 });

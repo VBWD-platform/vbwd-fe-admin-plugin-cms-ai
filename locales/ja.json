@@ -12,6 +12,7 @@
     "imageOnly": "プロンプトから画像のみを生成",
     "generate": "生成",
     "generating": "生成中…",
+    "generationDone": "AI コンテンツの生成が完了しました",
     "errors": {
       "missingPrompt": "まずプロンプトを入力してください。",
       "generic": "AI 生成に失敗しました。もう一度お試しください。"

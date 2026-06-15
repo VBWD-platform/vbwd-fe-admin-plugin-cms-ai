@@ -66,4 +66,13 @@ describe('CmsAiMenuButton.vue', () => {
     expect(state.readExcerpt).toBe(false);
     expect(state.open).toBe(true);
   });
+
+  it('closes the dropdown menu after an action is selected', async () => {
+    const wrapper = mountButton();
+    await wrapper.find('[data-testid="cms-ai-menu"]').trigger('click');
+    expect(wrapper.find('[data-testid="cms-ai-action-article"]').exists()).toBe(true);
+
+    await wrapper.find('[data-testid="cms-ai-action-article"]').trigger('click');
+    expect(wrapper.find('[data-testid="cms-ai-action-article"]').exists()).toBe(false);
+  });
 });

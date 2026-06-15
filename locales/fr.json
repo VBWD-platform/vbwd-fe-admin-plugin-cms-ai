@@ -12,6 +12,7 @@
     "imageOnly": "Générer uniquement une image à partir du prompt",
     "generate": "Générer",
     "generating": "Génération…",
+    "generationDone": "La génération de contenu par IA est terminée",
     "errors": {
       "missingPrompt": "Veuillez d'abord saisir un prompt.",
       "generic": "La génération par IA a échoué. Veuillez réessayer."

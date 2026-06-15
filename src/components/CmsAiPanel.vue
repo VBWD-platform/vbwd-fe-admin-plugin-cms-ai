@@ -65,9 +65,9 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { Alert, Button } from 'vbwd-view-component';
+import { Alert, Button, AppEvents, eventBus, type NotificationPayload } from 'vbwd-view-component';
 import { api } from '@/api';
-import { getCmsAiPanelState } from '../cmsAiPanelState';
+import { getCmsAiPanelState, type CmsAiAction } from '../cmsAiPanelState';
 import type { CmsEditorContext, CmsEditorPatch } from '../../../cms-admin/src/editor/cmsEditorExtensionRegistry';
 
 const props = withDefaults(
@@ -94,20 +94,46 @@ const imageOnly = ref(false);
 const loading = ref(false);
 const error = ref('');
 
+// Actions that regenerate from the current title + content rather than from a
+// user prompt. With an empty prompt they fall back to a default instruction so
+// the backend (which 404s on an empty prompt) still gets a non-empty prompt.
+const DEFAULT_INSTRUCTIONS: Partial<Record<CmsAiAction, string>> = {
+  seo: 'Generate SEO metadata from the current title and content.',
+  restyle: 'Restyle this page.',
+};
+
 function onToggle(event: Event): void {
   panelState.open = (event.target as HTMLDetailsElement).open;
 }
 
+/**
+ * The effective prompt for the request: the typed prompt when present, else the
+ * action's default instruction (seo/restyle). Empty when no prompt is typed and
+ * the action has no default — article/free-text genuinely needs one.
+ */
+function resolvePrompt(): string {
+  const typed = prompt.value.trim();
+  if (typed) return typed;
+  return DEFAULT_INSTRUCTIONS[panelState.action] ?? '';
+}
+
 async function generate(): Promise<void> {
-  if (!prompt.value.trim()) {
+  const effectivePrompt = imageOnly.value ? prompt.value.trim() : resolvePrompt();
+  if (!effectivePrompt) {
     error.value = t('cmsAi.errors.missingPrompt');
     return;
   }
   loading.value = true;
   error.value = '';
   try {
-    const patch = imageOnly.value ? await generateImage() : await generateFields();
+    const patch = imageOnly.value
+      ? await generateImage()
+      : await generateFields(effectivePrompt);
     props.context.applyPatch(patch);
+    eventBus.emit<NotificationPayload>(AppEvents.NOTIFICATION_SHOW, {
+      type: 'success',
+      message: t('cmsAi.generationDone'),
+    });
   } catch {
     error.value = t('cmsAi.errors.generic');
   } finally {
@@ -115,13 +141,13 @@ async function generate(): Promise<void> {
   }
 }
 
-async function generateFields(): Promise<CmsEditorPatch> {
+async function generateFields(effectivePrompt: string): Promise<CmsEditorPatch> {
   const requestContext = props.context.getContext({ readExcerpt: panelState.readExcerpt });
   const response = await api.post<{ patch: CmsEditorPatch }>(
     GENERATE_URL,
     {
       action: panelState.action,
-      prompt: prompt.value,
+      prompt: effectivePrompt,
       read_excerpt: panelState.readExcerpt,
       context: requestContext,
     },

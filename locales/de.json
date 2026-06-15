@@ -12,6 +12,7 @@
     "imageOnly": "Nur ein Bild aus dem Prompt generieren",
     "generate": "Generieren",
     "generating": "Wird generiert…",
+    "generationDone": "KI-Inhaltsgenerierung abgeschlossen",
     "errors": {
       "missingPrompt": "Bitte geben Sie zuerst einen Prompt ein.",
       "generic": "Die KI-Generierung ist fehlgeschlagen. Bitte erneut versuchen."

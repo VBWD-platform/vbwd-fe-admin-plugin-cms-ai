@@ -12,6 +12,7 @@
     "imageOnly": "仅根据提示生成图片",
     "generate": "生成",
     "generating": "生成中…",
+    "generationDone": "AI 内容生成已完成",
     "errors": {
       "missingPrompt": "请先输入提示。",
       "generic": "AI 生成失败，请重试。"

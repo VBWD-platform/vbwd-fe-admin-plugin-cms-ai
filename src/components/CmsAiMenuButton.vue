@@ -9,15 +9,17 @@
         {{ $t('cmsAi.menu') }}
       </Button>
     </template>
-    <div
-      v-for="action in ACTIONS"
-      :key="action"
-      class="vbwd-dropdown-item"
-      :data-testid="`cms-ai-action-${action}`"
-      @click="onSelect(action)"
-    >
-      {{ $t(`cmsAi.actions.${action}`) }}
-    </div>
+    <template #default="{ close }">
+      <div
+        v-for="action in ACTIONS"
+        :key="action"
+        class="vbwd-dropdown-item"
+        :data-testid="`cms-ai-action-${action}`"
+        @click="onSelect(action, close)"
+      >
+        {{ $t(`cmsAi.actions.${action}`) }}
+      </div>
+    </template>
   </Dropdown>
 </template>
 
@@ -32,7 +34,8 @@ defineProps<{ context: CmsEditorContext }>();
 
 const ACTIONS: CmsAiAction[] = ['article', 'seo', 'restyle'];
 
-function onSelect(action: CmsAiAction): void {
+function onSelect(action: CmsAiAction, close: () => void): void {
   selectAction(action);
+  close();
 }
 </script>

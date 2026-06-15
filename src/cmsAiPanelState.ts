@@ -11,7 +11,10 @@
  */
 import { reactive } from 'vue';
 
-export type CmsAiAction = 'article' | 'seo' | 'restyle';
+// 'freeform' is the default for a free-typed prompt: the model fills whichever
+// fields the instruction asks for (e.g. "fill the SEO fields"). The other three
+// are explicit, narrowly-scoped actions chosen from the AI ✨ menu.
+export type CmsAiAction = 'freeform' | 'article' | 'seo' | 'restyle';
 
 interface CmsAiPanelState {
   /** Whether the collapsible panel is open. */
@@ -24,7 +27,10 @@ interface CmsAiPanelState {
 
 const state = reactive<CmsAiPanelState>({
   open: false,
-  action: 'article',
+  // Default to freeform so a free-typed prompt (e.g. "fill the SEO fields") fills
+  // whatever the instruction asks — not just the article fields. A specific menu
+  // action overrides this via selectAction().
+  action: 'freeform',
   readExcerpt: true,
 });
 

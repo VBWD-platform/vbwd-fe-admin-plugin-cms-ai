@@ -12,6 +12,7 @@
     "imageOnly": "Generate only image from the prompt",
     "generate": "Generate",
     "generating": "Generating…",
+    "generationDone": "AI content generation is done",
     "errors": {
       "missingPrompt": "Please enter a prompt first.",
       "generic": "AI generation failed. Please try again."
