@@ -1,0 +1,20 @@
+{
+  "cmsAi": {
+    "menu": "AI ✨",
+    "panelTitle": "AI 助手",
+    "actions": {
+      "article": "根据摘要撰写文章",
+      "seo": "重新生成所有 SEO 字段",
+      "restyle": "重设页面样式"
+    },
+    "promptPlaceholder": "描述你的需求（例如：撰写一篇关于天文学的文章，但不要填写 SEO 字段）…",
+    "readExcerpt": "读取摘要",
+    "imageOnly": "仅根据提示生成图片",
+    "generate": "生成",
+    "generating": "生成中…",
+    "errors": {
+      "missingPrompt": "请先输入提示。",
+      "generic": "AI 生成失败，请重试。"
+    }
+  }
+}

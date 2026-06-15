@@ -1,0 +1,20 @@
+{
+  "cmsAi": {
+    "menu": "AI ✨",
+    "panelTitle": "AI assistant",
+    "actions": {
+      "article": "Write an article from excerpt",
+      "seo": "Re-generate all SEO fields",
+      "restyle": "Restyle the page"
+    },
+    "promptPlaceholder": "Describe what you want (e.g. write an article about astronomy, but do not fill SEO fields)…",
+    "readExcerpt": "Read excerpt",
+    "imageOnly": "Generate only image from the prompt",
+    "generate": "Generate",
+    "generating": "Generating…",
+    "errors": {
+      "missingPrompt": "Please enter a prompt first.",
+      "generic": "AI generation failed. Please try again."
+    }
+  }
+}

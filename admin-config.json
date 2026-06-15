@@ -1,0 +1,22 @@
+{
+  "tabs": [
+    {
+      "id": "general",
+      "label": "General",
+      "fields": [
+        {
+          "key": "debug_mode",
+          "label": "Debug mode",
+          "component": "checkbox",
+          "description": "Verbose console logging for the cms-ai editor helper."
+        },
+        {
+          "key": "image_enabled",
+          "label": "Enable image generation",
+          "component": "checkbox",
+          "description": "Show the \"Generate only image from the prompt\" option in the AI panel."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "cmsAi": {
+    "menu": "AI ✨",
+    "panelTitle": "AI アシスタント",
+    "actions": {
+      "article": "抜粋から記事を書く",
+      "seo": "すべての SEO フィールドを再生成",
+      "restyle": "ページのスタイルを変更"
+    },
+    "promptPlaceholder": "ご希望の内容を入力してください（例：天文学についての記事を書く。ただし SEO フィールドは埋めない）…",
+    "readExcerpt": "抜粋を読む",
+    "imageOnly": "プロンプトから画像のみを生成",
+    "generate": "生成",
+    "generating": "生成中…",
+    "errors": {
+      "missingPrompt": "まずプロンプトを入力してください。",
+      "generic": "AI 生成に失敗しました。もう一度お試しください。"
+    }
+  }
+}

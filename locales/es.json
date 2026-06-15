@@ -1,0 +1,20 @@
+{
+  "cmsAi": {
+    "menu": "IA ✨",
+    "panelTitle": "Asistente de IA",
+    "actions": {
+      "article": "Escribir un artículo a partir del extracto",
+      "seo": "Regenerar todos los campos SEO",
+      "restyle": "Cambiar el estilo de la página"
+    },
+    "promptPlaceholder": "Describe lo que quieres (p. ej. escribe un artículo sobre astronomía, pero no rellenes los campos SEO)…",
+    "readExcerpt": "Leer extracto",
+    "imageOnly": "Generar solo una imagen a partir del prompt",
+    "generate": "Generar",
+    "generating": "Generando…",
+    "errors": {
+      "missingPrompt": "Introduce primero un prompt.",
+      "generic": "La generación con IA ha fallado. Inténtalo de nuevo."
+    }
+  }
+}

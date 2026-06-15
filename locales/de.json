@@ -1,0 +1,20 @@
+{
+  "cmsAi": {
+    "menu": "KI ✨",
+    "panelTitle": "KI-Assistent",
+    "actions": {
+      "article": "Artikel aus dem Auszug schreiben",
+      "seo": "Alle SEO-Felder neu generieren",
+      "restyle": "Seite neu gestalten"
+    },
+    "promptPlaceholder": "Beschreiben Sie, was Sie möchten (z. B. einen Artikel über Astronomie, aber keine SEO-Felder füllen)…",
+    "readExcerpt": "Auszug lesen",
+    "imageOnly": "Nur ein Bild aus dem Prompt generieren",
+    "generate": "Generieren",
+    "generating": "Wird generiert…",
+    "errors": {
+      "missingPrompt": "Bitte geben Sie zuerst einen Prompt ein.",
+      "generic": "Die KI-Generierung ist fehlgeschlagen. Bitte erneut versuchen."
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "debug_mode": {
+    "type": "boolean",
+    "default": false,
+    "description": "Verbose console logging for the cms-ai editor helper."
+  },
+  "image_enabled": {
+    "type": "boolean",
+    "default": true,
+    "description": "Show the \"Generate only image from the prompt\" option in the AI panel."
+  }
+}

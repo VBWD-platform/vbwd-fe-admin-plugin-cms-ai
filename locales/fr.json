@@ -1,0 +1,20 @@
+{
+  "cmsAi": {
+    "menu": "IA ✨",
+    "panelTitle": "Assistant IA",
+    "actions": {
+      "article": "Rédiger un article à partir de l'extrait",
+      "seo": "Régénérer tous les champs SEO",
+      "restyle": "Redéfinir le style de la page"
+    },
+    "promptPlaceholder": "Décrivez ce que vous voulez (par ex. rédiger un article sur l'astronomie, mais sans remplir les champs SEO)…",
+    "readExcerpt": "Lire l'extrait",
+    "imageOnly": "Générer uniquement une image à partir du prompt",
+    "generate": "Générer",
+    "generating": "Génération…",
+    "errors": {
+      "missingPrompt": "Veuillez d'abord saisir un prompt.",
+      "generic": "La génération par IA a échoué. Veuillez réessayer."
+    }
+  }
+}
