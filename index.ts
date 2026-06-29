@@ -33,7 +33,7 @@ const LOCALES: Record<string, Record<string, unknown>> = { en, de, es, fr, ja, r
 
 export const cmsAiPlugin: IPlugin = {
   name: 'cms-ai',
-  version: '1.0.0',
+  version: '26.6',
   dependencies: ['cms-admin'],
   description: 'AI helper for the CMS editor — content, SEO and image generation.',
 
