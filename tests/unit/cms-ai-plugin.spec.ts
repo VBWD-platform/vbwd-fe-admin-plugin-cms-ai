@@ -15,6 +15,11 @@ describe('cms-ai fe-admin plugin', () => {
     registry = new PluginRegistry();
     sdk = new PlatformSDK();
     clearCmsEditorExtensions();
+    // cms-ai declares `dependencies: ['cms-admin']`, so installAll() resolves
+    // the dependency graph and throws "Dependency cms-admin not found" unless a
+    // cms-admin plugin is registered first. The editor seam itself is imported
+    // directly above, so a no-op stub is enough to satisfy resolution.
+    registry.register({ name: 'cms-admin', version: cmsAiPlugin.version, install() {} });
   });
 
   it('declares correct metadata', () => {
